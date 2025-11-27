@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sitanshu Kumar - Python Developer & Machine Learning Enthusiast">
+    <meta name="keywords" content="Python, Machine Learning, Deep Learning, Data Science, NLP">
+    <meta name="author" content="Sitanshu Kumar">
+    <title>Sitanshu Kumar | ML Developer</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #000; --text: #fff; --text-dim: rgba(255,255,255,0.6);
+            --border: rgba(255,255,255,0.08); --card-bg: rgba(255,255,255,0.02);
+        }
+        [data-theme="light"] {
+            --bg: #fff; --text: #000; --text-dim: rgba(0,0,0,0.6);
+            --border: rgba(0,0,0,0.08); --card-bg: rgba(0,0,0,0.02);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg); color: var(--text);
+            transition: all 0.5s ease; overflow-x: hidden;
+        }
+
+        .loading-screen {
+            position: fixed; inset: 0; background: #000; z-index: 9999;
+            display: flex; align-items: center; justify-content: center;
+            transition: opacity 0.5s;
+        }
+        .loading-screen.hide { opacity: 0; pointer-events: none; }
+        
+        .code-anim {
+            font-family: 'Courier New', monospace; font-size: 14px;
+            color: #0f0; max-width: 80%; max-height: 80%; overflow: hidden;
+            line-height: 1.5; text-shadow: 0 0 10px rgba(0,255,0,0.5);
+        }
+        .code-line { opacity: 0; animation: fadeIn 0.1s ease forwards; }
+        @keyframes fadeIn { to { opacity: 1; }}
+
+        .gradient-bg {
+            position: fixed; inset: 0; z-index: 0; overflow: hidden;
+        }
+        .orb {
+            position: absolute; border-radius: 50%; filter: blur(80px);
+            opacity: 0.6; animation: float 20s ease-in-out infinite;
+        }
+        .orb1 { width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(120,119,198,0.8), transparent);
+            top: -10%; left: -10%;
+        }
+        .orb2 { width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(255,100,150,0.7), transparent);
+            bottom: -10%; right: -10%; animation-delay: 5s;
+        }
+        .orb3 { width: 450px; height: 450px;
+            background: radial-gradient(circle, rgba(100,180,255,0.7), transparent);
+            top: 40%; right: -10%; animation-delay: 10s;
+        }
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            25% { transform: translate(100px, -100px); }
+            50% { transform: translate(-50px, 100px); }
+            75% { transform: translate(150px, 50px); }
+        }
+
+        [data-theme="light"] .orb { opacity: 0.3; }
+
+        .container { position: relative; z-index: 2; max-width: 1400px;
+            margin: 0 auto; padding: 40px 20px;
+        }
+
+        nav { display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 0; margin-bottom: 80px;
+        }
+        .nav-left { display: flex; align-items: center; gap: 20px; }
+        .logo {
+            font-size: 1.8rem; font-weight: 800;
+            background: linear-gradient(135deg, #7877c6, #ff6496, #64b4ff);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .theme-btn {
+            width: 50px; height: 50px; border-radius: 50%;
+            border: 2px solid var(--border); background: var(--card-bg);
+            cursor: pointer; font-size: 24px; transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+        .theme-btn:hover { transform: rotate(180deg); }
+
+        .nav-toggle { display: none; flex-direction: column; gap: 5px;
+            background: none; border: none; cursor: pointer;
+        }
+        .nav-toggle span { width: 25px; height: 2px; background: var(--text);
+            transition: all 0.3s;
+        }
+        .nav-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(7px, 7px); }
+        .nav-toggle.active span:nth-child(2) { opacity: 0; }
+        .nav-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -7px); }
+
+        .nav-links { display: flex; gap: 40px; list-style: none; }
+        .nav-links a {
+            color: var(--text-dim); text-decoration: none; font-weight: 500;
+            transition: color 0.3s; position: relative;
+        }
+        .nav-links a::after {
+            content: ''; position: absolute; bottom: -5px; left: 0;
+            width: 0; height: 2px;
+            background: linear-gradient(90deg, #7877c6, #ff6496);
+            transition: width 0.3s;
+        }
+        .nav-links a:hover { color: var(--text); }
+        .nav-links a:hover::after { width: 100%; }
+
+        .hero { text-align: center; padding: 100px 0 120px; }
+        .hero-badge {
+            display: inline-block; padding: 8px 20px;
+            background: var(--card-bg); border: 1px solid var(--border);
+            border-radius: 50px; font-size: 0.85rem; margin-bottom: 30px;
+        }
+        .hero h1 {
+            font-size: 5.5rem; font-weight: 900; line-height: 1.1;
+            background: linear-gradient(135deg, #fff, #a0a0ff, #ffa0e0);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            animation: glow 3s ease-in-out infinite; margin-bottom: 20px;
+        }
+        [data-theme="light"] .hero h1 {
+            background: linear-gradient(135deg, #000, #5050a0, #c05080);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        @keyframes glow { 0%, 100% { filter: brightness(1); } 50% { filter: brightness(1.2); }}
+        
+        .hero p { font-size: 1.3rem; color: var(--text-dim);
+            max-width: 600px; margin: 0 auto 40px; line-height: 1.6;
+        }
+        .cta-buttons { display: flex; gap: 20px; justify-content: center; margin-top: 40px; }
+        .btn {
+            padding: 16px 40px; border-radius: 12px; text-decoration: none;
+            font-weight: 600; transition: all 0.3s; border: none; cursor: pointer;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #7877c6, #ff6496);
+            color: white; box-shadow: 0 10px 30px rgba(120,119,198,0.5);
+        }
+        .btn-primary:hover { transform: translateY(-3px);
+            box-shadow: 0 15px 50px rgba(120,119,198,0.7);
+        }
+        .btn-secondary {
+            background: var(--card-bg); color: var(--text);
+            border: 1px solid var(--border);
+        }
+        .btn-secondary:hover { transform: translateY(-3px); }
+
+        .section-header { text-align: center; margin-bottom: 80px; }
+        .section-header h2 { font-size: 3rem; font-weight: 800; margin-bottom: 15px; }
+        .section-header p { font-size: 1.1rem; color: var(--text-dim); }
+
+        .projects-section { padding: 80px 0; }
+        .projects-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+        .project-card {
+            background: var(--card-bg); border: 1px solid var(--border);
+            border-radius: 24px; padding: 40px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(20px); position: relative; overflow: hidden;
+        }
+        .project-card::before {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(135deg, rgba(120,119,198,0.15), rgba(255,100,150,0.15));
+            opacity: 0; transition: opacity 0.4s;
+        }
+        .project-card:hover::before { opacity: 1; }
+        .project-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            border-color: rgba(120,119,198,0.4);
+            box-shadow: 0 25px 70px rgba(120,119,198,0.4), 0 10px 30px rgba(255,100,150,0.3);
+        }
+
+        .project-icon {
+            width: 60px; height: 60px;
+            background: linear-gradient(135deg, #7877c6, #ff6496);
+            border-radius: 16px; display: flex; align-items: center;
+            justify-content: center; font-size: 28px;
+            box-shadow: 0 8px 20px rgba(120,119,198,0.4);
+            margin-bottom: 20px; position: relative; z-index: 1;
+        }
+        .project-card h3 { font-size: 1.5rem; font-weight: 700;
+            margin-bottom: 15px; position: relative; z-index: 1;
+        }
+        .project-card p { color: var(--text-dim); line-height: 1.7;
+            margin-bottom: 25px; position: relative; z-index: 1;
+        }
+        .tech-stack { display: flex; gap: 10px; flex-wrap: wrap;
+            margin-bottom: 25px; position: relative; z-index: 1;
+        }
+        .tech-tag {
+            padding: 6px 14px; background: var(--card-bg);
+            border: 1px solid var(--border); border-radius: 20px;
+            font-size: 0.8rem; color: var(--text-dim);
+        }
+        .project-link {
+            display: inline-flex; align-items: center; gap: 8px;
+            color: #7877c6; text-decoration: none; font-weight: 600;
+            position: relative; z-index: 1; transition: gap 0.3s;
+        }
+        .project-link:hover { gap: 12px; }
+
+        .skills-section { padding: 80px 0; }
+        .skills-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+        .skill-card {
+            background: var(--card-bg); border: 1px solid var(--border);
+            border-radius: 20px; padding: 35px; text-align: center;
+            transition: all 0.3s; backdrop-filter: blur(20px);
+        }
+        .skill-card:hover {
+            transform: translateY(-8px); border-color: rgba(120,119,198,0.3);
+            box-shadow: 0 15px 40px rgba(120,119,198,0.3);
+        }
+        .skill-icon { font-size: 3rem; margin-bottom: 15px; }
+        .skill-card h4 { font-size: 1.2rem; margin-bottom: 10px; }
+        .skill-card p { color: var(--text-dim); font-size: 0.9rem; }
+
+        footer {
+            text-align: center; padding: 60px 0 40px;
+            border-top: 1px solid var(--border); margin-top: 100px;
+        }
+        .footer-links { display: flex; gap: 30px; justify-content: center;
+            margin-bottom: 30px;
+        }
+        .footer-links a { color: var(--text-dim); text-decoration: none;
+            transition: color 0.3s;
+        }
+        .footer-links a:hover { color: var(--text); }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 3rem; }
+            .nav-toggle { display: flex; }
+            .nav-links {
+                position: fixed; top: 0; right: -100%; width: 70%;
+                height: 100vh; background: rgba(0,0,0,0.95);
+                flex-direction: column; justify-content: center;
+                align-items: center; gap: 40px; transition: right 0.4s;
+                z-index: 1000; border-left: 1px solid var(--border);
+            }
+            [data-theme="light"] .nav-links { background: rgba(255,255,255,0.95); }
+            .nav-links.active { right: 0; }
+            .projects-grid { grid-template-columns: 1fr; }
+            .cta-buttons { flex-direction: column; }
+            .code-anim { font-size: 10px; }
+        }
+
+        /* Cursor styling for ABOUT ME typing (bright green block) */
+        #aboutCodeBox::after {
+            content: "▉";
+            color: #00ff00;
+            animation: blink 0.7s infinite;
+            margin-left: 3px;
+        }
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-screen" id="loader">
+        <div class="code-anim" id="codeAnim"></div>
+    </div>
+
+    <div class="gradient-bg">
+        <div class="orb orb1"></div>
+        <div class="orb orb2"></div>
+        <div class="orb orb3"></div>
+    </div>
+    
+    <div class="container">
+        <nav>
+            <div class="nav-left">
+                <div class="logo">Sitanshu Kumar</div>
+                <button class="theme-btn" id="themeBtn">🌙</button>
+            </div>
+            <button class="nav-toggle" id="navToggle">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+
+        <section class="hero">
+            <div class="hero-badge">👋 Available for collaboration</div>
+            <h1>Building the Future,<br>One Project at a Time</h1>
+            <p>Python Developer & Machine Learning Enthusiast crafting intelligent solutions with data science and deep learning</p>
+            <div class="cta-buttons">
+                <a href="https://github.com/FlamerFx" class="btn btn-primary" target="_blank">View GitHub</a>
+                <a href="#projects" class="btn btn-secondary">Explore Projects</a>
+            </div>
+        </section>
+
+        <section class="about-section" id="about" style="padding: 80px 0;">
+            <div class="section-header">
+                <h2>About Me</h2>
+                <p>Who I am and what I do</p>
+            </div>
+
+            <div style="
+                max-width: 900px; 
+                margin: 0 auto; 
+                background: var(--card-bg); 
+                border: 1px solid var(--border);
+                padding: 40px;
+                border-radius: 25px;
+                backdrop-filter: blur(20px);
+                line-height: 1.7;
+                font-size: 1.1rem;
+                color: var(--text-dim);
+            ">
+                <p>
+                    I'm <strong>Sitanshu Kumar</strong>, a Python developer and Machine Learning
+                    enthusiast currently pursuing my BCA with AIML. I enjoy building intelligent systems,
+                    experimenting with neural networks, and developing practical tools that solve real problems.
+                </p>
+
+                <br>
+
+                <p>
+                    I work extensively with Python, deep learning, NLP, and data science. My focus right now
+                    is mastering algorithms, machine learning fundamentals, and creating polished, real-world
+                    projects that improve my engineering skills.
+                </p>
+
+                <br>
+
+                <p>
+                    Beyond coding, I'm improving my math fundamentals for ML, strengthening my DSA, and exploring
+                    ideas that push my creativity and logic further.
+                </p>
+            </div>
+
+            <!-- Coding animation box -->
+            <div class="about-code-box" 
+                style="
+                    margin: 40px auto 0;
+                    max-width: 900px;
+                    background: rgba(0,0,0,0.3);
+                    border: 1px solid var(--border);
+                    border-radius: 20px;
+                    padding: 25px;
+                    backdrop-filter: blur(20px);
+                    font-family: 'Courier New', monospace;
+                    color: #0f0;
+                    font-size: 15px;
+                    line-height: 1.5;
+                    overflow: hidden;
+                    white-space: pre-wrap;
+                    text-shadow: 0 0 10px rgba(0,255,0,0.5);
+                "
+                id="aboutCodeBox">
+            </div>
+        </section>
+
+        <section class="projects-section" id="projects">
+            <div class="section-header">
+                <h2>Featured Projects</h2>
+                <p>A collection of my recent work and experiments</p>
+            </div>
+
+            <div class="projects-grid">
+                <div class="project-card">
+                    <div class="project-icon">🧠</div>
+                    <h3>Emotion Analysis</h3>
+                    <p>Deep learning model for predicting emotions from text using neural networks. Features Python-based training pipeline and inference system.</p>
+                    <div class="tech-stack">
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">TensorFlow</span>
+                        <span class="tech-tag">NLP</span>
+                    </div>
+                    <a href="https://github.com/FlamerFx/Emotion-Analysis" class="project-link" target="_blank">View Project →</a>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-icon">🌤️</div>
+                    <h3>Weather Forecasting</h3>
+                    <p>ML-based weather prediction using historical climate data. Implements regression models and time series analysis for accurate forecasting.</p>
+                    <div class="tech-stack">
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">Scikit-learn</span>
+                        <span class="tech-tag">Pandas</span>
+                    </div>
+                    <a href="https://github.com/FlamerFx" class="project-link" target="_blank">View Project →</a>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-icon">🎬</div>
+                    <h3>Kaafila</h3>
+                    <p>Synchronized YouTube watch party platform for friends to enjoy videos together in real-time.</p>
+                    <div class="tech-stack">
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">WebSockets</span>
+                    </div>
+                    <a href="https://github.com/FlamerFx/Kaafila" class="project-link" target="_blank">View Project →</a>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-icon">🔒</div>
+                    <h3>Study Lock</h3>
+                    <p>Productivity tool helping students stay focused during study sessions by managing distractions effectively.</p>
+                    <div class="tech-stack">
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">Productivity</span>
+                    </div>
+                    <a href="https://github.com/FlamerFx/Study-Lock" class="project-link" target="_blank">View Project →</a>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-icon">📄</div>
+                    <h3>PDFForge Editor</h3>
+                    <p>Comprehensive PDF editing tool for merging, splitting, and modifying documents with an intuitive interface.</p>
+                    <div class="tech-stack">
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">PDF Processing</span>
+                    </div>
+                    <a href="https://github.com/FlamerFx/PDFForge-Editor" class="project-link" target="_blank">View Project →</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="skills-section" id="skills">
+            <div class="section-header">
+                <h2>Skills & Technologies</h2>
+                <p>Tools and technologies I work with</p>
+            </div>
+
+            <div class="skills-grid">
+                <div class="skill-card">
+                    <div class="skill-icon">🐍</div>
+                    <h4>Python</h4>
+                    <p>Backend development and automation</p>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">⚡</div>
+                    <h4>Machine Learning</h4>
+                    <p>Predictive models and analysis</p>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">🤖</div>
+                    <h4>Deep Learning</h4>
+                    <p>Neural networks and NLP</p>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">📊</div>
+                    <h4>Data Science</h4>
+                    <p>Data analysis and visualization</p>
+                </div>
+            </div>
+        </section>
+
+        <footer id="contact">
+            <div class="section-header">
+                <h2>Let's Connect</h2>
+                <p>Always open to interesting projects</p>
+            </div>
+
+            <div class="footer-links">
+                <a href="https://github.com/FlamerFx" target="_blank">GitHub</a>
+                <a href="https://mail.google.com/mail/?view=cm&fs=1&to=sitanshukumar65@gmail.com" target="_blank">Email</a>
+                <a href="https://www.linkedin.com/in/sitanshu-kumar-ab021a338/" target="_blank">LinkedIn</a>
+            </div>
+
+            <p>© 2024 Sitanshu Kumar</p>
+        </footer>
+    </div>
+
+    <script>
+        const code = ['import numpy as np','import tensorflow as tf','from sklearn.model_selection import train_test_split','','data = pd.read_csv("dataset.csv")','X_train, X_test, y_train, y_test = train_test_split(X, y)','','model = tf.keras.Sequential([','    tf.keras.layers.Dense(128, activation="relu"),','    tf.keras.layers.Dropout(0.2),','    tf.keras.layers.Dense(10, activation="softmax")','])','','model.compile(optimizer="adam", loss="categorical_crossentropy")','history = model.fit(X_train, y_train, epochs=50)','','print("Initializing portfolio...")','print("Welcome to Sitanshu Kumar\'s Portfolio")'];
+        
+        const codeAnim = document.getElementById('codeAnim');
+        const loader = document.getElementById('loader');
+        let i = 0;
+
+        function type() {
+            if (i < code.length) {
+                const line = document.createElement('div');
+                line.className = 'code-line';
+                line.textContent = code[i];
+                codeAnim.appendChild(line);
+                i++;
+                setTimeout(type, 80);
+            } else {
+                setTimeout(() => {
+                    loader.classList.add('hide');
+                    setTimeout(() => loader.style.display = 'none', 500);
+                }, 600);
+            }
+        }
+
+        window.addEventListener('load', () => setTimeout(type, 300));
+
+        // Theme toggle
+        const themeBtn = document.getElementById('themeBtn');
+        const html = document.documentElement;
+        const saved = localStorage.getItem('theme') || 'dark';
+        html.setAttribute('data-theme', saved);
+        themeBtn.textContent = saved === 'dark' ? '🌙' : '☀️';
+
+        themeBtn.onclick = () => {
+            const curr = html.getAttribute('data-theme');
+            const newTheme = curr === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            themeBtn.textContent = newTheme === 'dark' ? '🌙' : '☀️';
+        };
+
+        // Navigation
+        const navToggle = document.getElementById('navToggle');
+        const navLinks = document.getElementById('navLinks');
+        
+        navToggle.onclick = () => {
+            navToggle.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        };
+
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.onclick = (e) => {
+                e.preventDefault();
+                const target = document.querySelector(a.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                    navLinks.classList.remove('active');
+                    navToggle.classList.remove('active');
+                }
+            };
+        });
+
+        // Animations
+        const obs = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    e.target.style.opacity = '1';
+                    e.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.project-card, .skill-card').forEach(c => {
+            c.style.opacity = '0';
+            c.style.transform = 'translateY(30px)';
+            c.style.transition = 'opacity 0.6s, transform 0.6s';
+            obs.observe(c);
+        });
+
+        // Parallax orbs
+        document.addEventListener('mousemove', (e) => {
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            document.querySelectorAll('.orb').forEach((orb, i) => {
+                const speed = (i + 1) * 20;
+                orb.style.transform = `translate(${(x - 0.5) * speed}px, ${(y - 0.5) * speed}px)`;
+            });
+        });
+
+        /* -----------------------------
+           LETTER-BY-LETTER ABOUT TYPING
+           (replaces previous about typing code)
+        ------------------------------*/
+
+        const aboutCodeText = `class Developer:
+    def __init__(self):
+        self.name = 'Sitanshu Kumar'
+        self.role = 'ML & Python Developer'
+        self.focus = ['Machine Learning', 'Deep Learning', 'Python', 'DSA']
+
+    def current_goal(self):
+        return 'Build strong fundamentals + real projects'
+
+dev = Developer()
+print('Portfolio Loaded for:', dev.name)`;
+
+        const aboutBox = document.getElementById('aboutCodeBox');
+        let aboutCharIndex = 0;
+        const typingSpeed = 18; // ms per character (lower = faster)
+
+        // Ensure box is empty initially
+        aboutBox.textContent = '';
+
+        function typeAboutLetter() {
+            if (aboutCharIndex < aboutCodeText.length) {
+                const ch = aboutCodeText[aboutCharIndex];
+                // Append character as plain text (preserves spaces/newlines thanks to pre-wrap)
+                aboutBox.textContent += ch;
+                aboutCharIndex++;
+                setTimeout(typeAboutLetter, typingSpeed);
+            } else {
+                // typing finished — cursor remains (design choice)
+            }
+        }
+
+        // Start only when About area comes into view
+        const aboutObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && aboutCharIndex === 0) {
+                    typeAboutLetter();
+                }
+            });
+        }, { threshold: 0.15 });
+
+        aboutObserver.observe(aboutBox);
+    </script>
+</body>
+</html>
